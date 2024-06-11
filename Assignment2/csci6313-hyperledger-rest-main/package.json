@@ -1,0 +1,18 @@
+{
+    "name": "asset-transfer-basic",
+    "version": "1.0.0",
+    "private": true,
+    "description": "A supplementary project for actor-fsm-model",
+    "engines": {
+        "node": ">=12",
+        "npm": ">=5"
+    },
+    "engineStrict": true,
+    "author": "Christian Gang Liu",
+    "dependencies": {
+        "fabric-ca-client": "2.2.2",
+        "fabric-network": "2.2.2",
+        "jquery": "^3.6.0",
+        "url": "^0.11.0"
+    }
+}
