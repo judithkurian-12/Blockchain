@@ -3,39 +3,38 @@ import { create } from 'ipfs-http-client';
 
 
 // Initialize the IPFS client
-const client = create('http://127.0.0.1:6001');
+const client475 = create('http://127.0.0.1:6001');
 
-const MFS_path = "/files_";
+const MFS_path475 = "/files_";
 
-let document = "This is a purchase document!";
-let defaultAcc;
+let document475 = "This is a purchase document!";
+let defaultAcc475;
 let h, r, s, v;
-let web3, myContract;
+let web3, myContract475;
 
 web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545/"));
 
-const callStoreOnLocalGanache = async function () {
+const callStoreOnLocalGanache475 = async function () {
     try {
         const accounts = await web3.eth.getAccounts();
         web3.eth.defaultAccount = accounts[0];
-        defaultAcc = web3.eth.defaultAccount;
-        console.log("Default Account:", defaultAcc);
+        defaultAcc475 = web3.eth.defaultAccount;
+        console.log("Default Account:", defaultAcc475);
 
-        myContract = new web3.eth.Contract(abi, contractAddr, { from: defaultAcc });
+        myContract475 = new web3.eth.Contract(abi, contractAddr, { from: defaultAcc475 });
 
-        h = web3.utils.soliditySha3(document);
-        const signature = await web3.eth.sign(h, defaultAcc); // using ECDSA
-		console.log("MFS: ",MFS_path + h.replace("0x", ""), signature);
+        h = web3.utils.soliditySha3(document475);
+        const signature = await web3.eth.sign(h, defaultAcc475); // using ECDSA
+		console.log("MFS: ",MFS_path475 + h.replace("0x", ""), signature);
 
-        await client.files.write(
-            MFS_path + h.replace("0x", ""),
+        await client475.files.write(
+            MFS_path475 + h.replace("0x", ""),
             new TextEncoder().encode(signature),
             { create: true}
         );
-		console.log(" After Test");
 
-        await myContract.methods
-            .setIpfsCid(h.replace("0x", ""))
+        await myContract475.methods
+            .setIpfsCid475(h.replace("0x", ""))
             .send({ from: web3.eth.defaultAccount });
 
         console.log("Document stored successfully!");
@@ -45,19 +44,19 @@ const callStoreOnLocalGanache = async function () {
     }
 };
 
-const callRetrieveOnLocalGanache = async function () {
+const callRetrieveOnLocalGanache475 = async function () {
     try {
-        const cid = await myContract.methods
-            .getIpfsCid()
+        const cid = await myContract475.methods
+            .getIpfsCid475()
             .call({ from: web3.eth.defaultAccount });
 		console.log("CID Retrieved:", cid);
 
-        const stat = await client.files.stat(MFS_path + cid, { hash: true });
+        const stat = await client475.files.stat(MFS_path475 + cid, { hash: true });
 
         const ipfsAddr = stat.cid.toString();
         console.log("IPFS Address:", ipfsAddr);
 
-        const resp = await client.cat(ipfsAddr);
+        const resp = await client475.cat(ipfsAddr);
         let content = [];
         for await (const chunk of resp) {
             content = [...content, ...chunk];
@@ -76,16 +75,16 @@ const callRetrieveOnLocalGanache = async function () {
     }
 };
 
-const verifyDocumentOnLocalGanache = async function (accountToBeVerified) {
+const verifyDocumentOnLocalGanache475 = async function (accountToBeVerified) {
     try {
-        const cid = await myContract.methods.getIpfsCid().call({ from: web3.eth.defaultAccount });
+        const cid = await myContract475.methods.getIpfsCid475().call({ from: web3.eth.defaultAccount });
         console.log("CID Retrieved:", cid);
 
-        const stat = await client.files.stat(MFS_path + cid, { hash: true });
+        const stat = await client475.files.stat(MFS_path475 + cid, { hash: true });
         const ipfsAddr = stat.cid.toString();
         console.log("IPFS Address:", ipfsAddr);
 
-        const resp = await client.cat(ipfsAddr);
+        const resp = await client475.cat(ipfsAddr);
         let content = [];
         for await (const chunk of resp) {
             content = [...content, ...chunk];
@@ -99,8 +98,8 @@ const verifyDocumentOnLocalGanache = async function (accountToBeVerified) {
 
         console.log("Recovered values:", { r, s, v });
 
-        const message = web3.utils.soliditySha3(document);
-        const signer = await myContract.methods.verify(message, v, r, s).call();
+        const message = web3.utils.soliditySha3(document475);
+        const signer = await myContract475.methods.verify475(message, v, r, s).call();
 
         if (signer.toLowerCase() === accountToBeVerified.toLowerCase()) {
             console.log("Signature is valid and signer is:", signer);
@@ -113,7 +112,7 @@ const verifyDocumentOnLocalGanache = async function (accountToBeVerified) {
 };
 
 
-let contractAddr = '0xe9c53dcace323dcc0908cc69b148112cbea77bf3';
+let contractAddr = '0xa1b8f489ca97ff1fb153bb947466a16df85c01fa';
 let abi = [
 	{
 		"inputs": [
@@ -123,14 +122,14 @@ let abi = [
 				"type": "string"
 			}
 		],
-		"name": "setIpfsCid",
+		"name": "setIpfsCid475",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "getIpfsCid",
+		"name": "getIpfsCid475",
 		"outputs": [
 			{
 				"internalType": "string",
@@ -164,7 +163,7 @@ let abi = [
 				"type": "bytes32"
 			}
 		],
-		"name": "verify",
+		"name": "verify475",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -177,11 +176,11 @@ let abi = [
 	}
 ]	
 
-callStoreOnLocalGanache().then(() => {
+callStoreOnLocalGanache475().then(() => {
   setTimeout(function () {
-    callRetrieveOnLocalGanache();
+    callRetrieveOnLocalGanache475();
     setTimeout(function () {
-		verifyDocumentOnLocalGanache(defaultAcc);
+		verifyDocumentOnLocalGanache475(defaultAcc475);
     }, 1500);
   }, 500);
 })

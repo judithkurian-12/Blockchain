@@ -31,7 +31,7 @@ contract Document {
      * @dev Store value in variable documentIpfsCid
      * @param newwords value to store
      */
-    function setIpfsCid(string memory newwords) public {
+    function setIpfsCid475(string memory newwords) public {
         documentIpfsCid = newwords;
     }
 
@@ -39,7 +39,7 @@ contract Document {
      * @dev Return value
      * @return value of 'documentIpfsCid'
      */
-    function getIpfsCid() public view returns (string memory) {
+    function getIpfsCid475() public view returns (string memory) {
         return documentIpfsCid;
     }
 
@@ -51,7 +51,7 @@ contract Document {
      * @param _r signature.slice(0, 66);
      * @param _s "0x" + signature.slice(66, 130);
      */
-    function verify(
+    function verify475(
         bytes memory _message,
         uint8 _v,
         bytes32 _r,
